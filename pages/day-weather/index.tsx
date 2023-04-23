@@ -1,34 +1,29 @@
 import moment from "moment";
 import React from "react";
 import Image from 'next/image'
-import small_rain from '../assets/images/small_rain.png';
-import small_cloud from '../assets/images/small_cloud.png';
-import small_sun from '../assets/images/small_sun.png';
-import small_thunderstorm from '../assets/images/small_thunderstorm.png';
 
-const DayWeather = (props: any) => {
+export function DayWeather(props: any) {
     const data = props.weatherData;
-    console.log("running somthing", data);
     const monthDay = moment.unix(data.dt).format('MMM DD');
     const weekDay = moment.unix(data.dt).format('dddd');
 
     const getWeatherImage = (weatherDayType: String) => {
         switch (weatherDayType) {
             case "Clear":
-                return <Image className="mx-auto" alt="Small Sun" src={small_sun} />
+                return <Image className="mx-auto" alt="Small Sun" src="/images/small_sun.png" width="32" height="32" />
             case "Clouds":
-                return <Image className="mx-auto" alt="Small Cloud" src={small_cloud} />
+                return <Image className="mx-auto" alt="Small Cloud" src="/images/small_cloud.png" width="32" height="32" />
             case "Drizzle":
             case "Rain":
-                return <Image className="mx-auto" alt="Small Rain" src={small_rain} />
+                return <Image className="mx-auto" alt="Small Rain" src="/images/small_rain" width="32" height="32" />
             case "Thunderstorm":
-                return <Image className="mx-auto" alt="Small Thunderstorm" src={small_thunderstorm} />
+                return <Image className="mx-auto" alt="Small Thunderstorm" src="/images/small_thunderstorm" width="32" height="32" />
             default:
                 return <div className="italic">{weatherDayType}</div>
         }
     }
 
-    const weatherImage = getWeatherImage(data.weather[0].main);
+    const weatherImage = getWeatherImage(data.weather.main);
 
     return (
         <div className="border-2 p-4 w-40 bg-gray-700">
@@ -41,5 +36,3 @@ const DayWeather = (props: any) => {
         </div>
     )
 }
-
-export default DayWeather;
