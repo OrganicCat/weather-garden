@@ -1,5 +1,5 @@
 import { getCityCoords } from "@/utility/cityConstants";
-import { basicWeather } from "@/utility/weatherConstants";
+import { WeatherDay, basicWeather } from "@/utility/weatherConstants";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const apiKey = process.env.NEXT_PUBLIC_OPEN_WEATHER_API_KEY;
@@ -18,19 +18,32 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
         //const result: Response = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${coordData.lat}&lon=${coordData.long}&nits=${units}&appid=${apiKey}`);
         //const weatherData = await result.json();
-        const weatherData = basicWeather;
-        const weatherArray = weatherData.list.map((day: any) => {
+        const weatherData = {
+            list: basicWeather
+        };
+        const weatherArray: WeatherDay[] = weatherData.list.map((day: any) => {
             return {
                 dt: day.dt,
-                weather: day.weather.main,
+                weather: day.weather,
                 temp: {
-                    day: day.main.temp,
-                    min: day.main.temp_min,
-                    max: day.main.temp_max,
-                    feels_like: day.main.feels_like
+                    day: day.temp.day,
+                    min: day.temp.min,
+                    max: day.temp.max
                 }
             }
         });
+        // const weatherArray: WeatherDay[] = weatherData.list.map((day: any) => {
+        //     return {
+        //         dt: day.dt,
+        //         weather: day.weather.main,
+        //         temp: {
+        //             day: day.main.temp,
+        //             min: day.main.temp_min,
+        //             max: day.main.temp_max,
+        //             feels_like: day.main.feels_like
+        //         }
+        //     }
+        // });
         res.status(200).send({ city, weatherArray });
     } catch (error) {
         console.error("[getWeatherData]: Error - ", error);

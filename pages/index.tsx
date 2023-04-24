@@ -1,6 +1,6 @@
 import { Inter } from 'next/font/google'
 import { useEffect, useState } from 'react';
-import { WeatherDay, basicWeather } from '@/utility/weatherConstants';
+import { WeatherDay, WeatherServiceData, basicWeather } from '@/utility/weatherConstants';
 import { DayWeather } from './day-weather';
 import { getWeatherByCity } from '@/services/weatherService';
 
@@ -15,22 +15,24 @@ export default function Home() {
     }, []);
 
     const displayWeather = async (city: String) => {
-        const chicagoWeather: WeatherDay[] | null = await getWeatherByCity(city);
-        if (!chicagoWeather || !chicagoWeather.data) {
+        const { weatherArray = basicWeather }: WeatherServiceData = await getWeatherByCity(city);
+
+        if (weatherArray.length === 0) {
             console.error("[displayWeather]: Error - Could not get weather, perhaps I overloaded my key again");
-            setWeather(basicWeather);
-        } else {
-            const fiveDayWeather = chicagoWeather.data.splice(0, 5);
+            const fiveDayWeather = basicWeather.slice(0, 5);
             setWeather(fiveDayWeather);
+        } else {
+            setWeather(weatherArray.slice(0, 5));
         }
     }
 
     return (
-        <main className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}>
-            <div className="flex flex-col items-center justify-center space-y-4">Weather Garden</div>
-            {weather && weather.map((value: WeatherDay, index: number) => {
-                return <DayWeather weatherData={value} key={index} />;
-            })}
+        <main className={`flex min-h-screen flex-co items-center justify-between p-24 ${inter.className}`}>
+            <div className="flex flex-row items-center justify-center">
+                {weather.map((value: WeatherDay, index: number) => {
+                    return <DayWeather weatherData={value} key={index} />;
+                })}
+            </div>
 
         </main>
     )
