@@ -5,6 +5,7 @@ import { WeatherDay } from "@/utility/weatherConstants";
 
 export function DayWeather({ weatherData }: { weatherData: WeatherDay }) {
     const monthDay = moment.unix(weatherData.dt).format('MMM DD');
+    const monthDayHour = moment.unix(weatherData.dt).format('MMM DD h:mm a');
     const weekDay = moment.unix(weatherData.dt).format('dddd');
 
     const getWeatherImage = (weatherDayType: String) => {
@@ -27,7 +28,7 @@ export function DayWeather({ weatherData }: { weatherData: WeatherDay }) {
 
     return (
         <div className="border-2 p-4 w-40 bg-gray-700">
-            <div className="text-center" data-id="monthday">{monthDay}</div>
+            <div className="text-center" data-id="monthday">{monthDayHour}</div>
             <div className="text-center border-b-2">{weekDay}</div>
             <div className="text-center text-2xl pt-4">{weatherData.temp.day} &deg;F</div>
             <div className="text-center py-4" data-id="weatherImage">{weatherImage}</div>

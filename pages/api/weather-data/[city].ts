@@ -16,34 +16,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const units: String = "imperial";
 
     try {
-        //const result: Response = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${coordData.lat}&lon=${coordData.long}&nits=${units}&appid=${apiKey}`);
-        //const weatherData = await result.json();
-        const weatherData = {
-            list: basicWeather
-        };
+        const result: Response = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${coordData.lat}&lon=${coordData.long}&units=${units}&appid=${apiKey}`);
+        const weatherData = await result.json();
+
         const weatherArray: WeatherDay[] = weatherData.list.map((day: any) => {
             return {
                 dt: day.dt,
-                weather: day.weather,
+                weather: day.weather.main,
                 temp: {
-                    day: day.temp.day,
-                    min: day.temp.min,
-                    max: day.temp.max
+                    day: day.main.temp,
+                    min: day.main.temp_min,
+                    max: day.main.temp_max,
+                    feels_like: day.main.feels_like
                 }
             }
         });
-        // const weatherArray: WeatherDay[] = weatherData.list.map((day: any) => {
-        //     return {
-        //         dt: day.dt,
-        //         weather: day.weather.main,
-        //         temp: {
-        //             day: day.main.temp,
-        //             min: day.main.temp_min,
-        //             max: day.main.temp_max,
-        //             feels_like: day.main.feels_like
-        //         }
-        //     }
-        // });
         res.status(200).send({ city, weatherArray });
     } catch (error) {
         console.error("[getWeatherData]: Error - ", error);
