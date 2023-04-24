@@ -22,12 +22,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const weatherArray: WeatherDay[] = weatherData.list.map((day: any) => {
             return {
                 dt: day.dt,
-                weather: day.weather.main,
+                weather: day.weather[0].main,
                 temp: {
-                    day: day.main.temp,
-                    min: day.main.temp_min,
-                    max: day.main.temp_max,
-                    feels_like: day.main.feels_like
+                    day: Math.round(day.main.temp),
+                    min: Math.round(day.main.temp_min),
+                    max: Math.round(day.main.temp_max),
+                    feels_like: Math.round(day.main.feels_like)
                 }
             }
         });

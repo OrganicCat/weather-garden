@@ -4,12 +4,14 @@ import { WeatherDay, WeatherServiceData, basicWeather } from '@/utility/weatherC
 import { DayWeather } from './day-weather';
 import { getWeatherByCity } from '@/services/weatherService';
 import moment from 'moment';
+import ThemeContext from '@/utility/ThemeContext';
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
     const [weather, setWeather] = useState<any>([]);
     const defaultCity = "Burlington";
+    const [theme, setTheme] = useState<"dark" | "light">("dark");
 
     useEffect(() => {
         displayWeather(defaultCity);
@@ -34,18 +36,22 @@ export default function Home() {
                 return true;
             }
         });
-        console.log("weatherslices: ", weatherSlices);
         return weatherSlices;
     };
 
     return (
-        <main className={`flex min-h-screen flex-co items-center justify-between p-24 ${inter.className}`}>
-            <div className="flex flex-row items-center justify-center">
-                {weather.map((value: WeatherDay, index: number) => {
-                    return <DayWeather weatherData={value} key={index} />;
-                })}
-            </div>
+        <>
+            <ThemeContext.Provider value={{ theme, setTheme }}>
+                <main className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}>
+                    <button className="select-none p-4 cursor-pointer border-2 rounded-md border-gray-700 bg-gray-700 text-white mb-4" onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>Toggle Theme</button>
+                    <div className="flex flex-row items-center justify-center">
+                        {weather.map((value: WeatherDay, index: number) => {
+                            return <DayWeather weatherData={value} key={index} />;
+                        })}
+                    </div>
+                </main>
 
-        </main>
+            </ThemeContext.Provider>
+        </>
     )
 }
