@@ -12,6 +12,7 @@ export default function Home() {
     const [weather, setWeather] = useState<any>([]);
     const defaultCity = "Burlington";
     const [theme, setTheme] = useState<"dark" | "light">("dark");
+    const borderColor = theme === "dark" ? "border-white" : "border-black";
 
     useEffect(() => {
         displayWeather(defaultCity);
@@ -44,7 +45,7 @@ export default function Home() {
             <ThemeContext.Provider value={{ theme, setTheme }}>
                 <main className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}>
                     <button className="select-none p-4 cursor-pointer border-2 rounded-md border-gray-700 bg-gray-700 text-white mb-4" onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>Toggle Theme</button>
-                    <div className="flex flex-row items-center justify-center">
+                    <div className={`flex flex-row items-center justify-evenly border-2 ${borderColor}`}>
                         {weather.map((value: WeatherDay, index: number) => {
                             return <DayWeather weatherData={value} key={index} />;
                         })}

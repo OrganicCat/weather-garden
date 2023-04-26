@@ -1,5 +1,5 @@
 import moment from "moment";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import Image from 'next/image'
 import { WeatherDay } from "@/utility/weatherConstants";
 import ThemeContext from "@/utility/ThemeContext";
@@ -34,8 +34,7 @@ export function DayWeather({ weatherData }: { weatherData: WeatherDay }) {
         const temp = weatherData.temp.day;
         const rain = weatherData.weather === "Rain" ? 1 : 0;
         return temp > 50 && temp < 90 && rain === 0 ? <>Good &#128519;</> : <>Bad &#128557;</>;
-    }
-
+    };
 
     const weatherImage = getWeatherImage(weatherData.weather);
 
